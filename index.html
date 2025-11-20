@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Avance</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <!-- BARRA SUPERIOR -->
+    <header class="top-bar">
+      <div class="logo">
+        <div class="logo-icon" aria-hidden="true">
+          <span>Δ</span>
+        </div>
+        <div class="logo-text">
+          <span class="logo-name">Avance</span>
+          <span class="logo-tagline">Da alfabetização ao emprego</span>
+        </div>
+      </div>
+
+      <div class="top-stats" aria-label="Seu progresso">
+        <div class="stat-pill" aria-label="Vidas">
+          <span class="stat-icon">❤️</span>
+          <span class="stat-value">3</span>
+        </div>
+        <div class="stat-pill" aria-label="Dias seguidos">
+          <span class="stat-icon">🔥</span>
+          <span class="stat-value">5</span>
+        </div>
+        <div class="stat-pill" aria-label="Moedas">
+          <span class="stat-icon">💎</span>
+          <span class="stat-value">120</span>
+        </div>
+
+        <button class="profile-avatar" aria-label="Abrir perfil">
+          J
+        </button>
+      </div>
+    </header>
+
+    <!-- TELA HOME -->
+    <main id="screen-home" class="screen screen--active" aria-labelledby="home-title">
+      <!-- HERO / CHAMADA PRINCIPAL -->
+      <section class="hero">
+        <div class="hero-left">
+          <p class="hero-badge">Trilha ativa</p>
+          <h1 id="home-title">Alfabetização básica</h1>
+          <p class="hero-text">
+            Vamos avançar mais um pouquinho hoje?  
+            Complete a próxima etapa da sua trilha.
+          </p>
+
+          <button class="hero-button" id="btn-continue">
+            ▶ Continuar “Meu nome”
+          </button>
+
+          <div class="hero-progress">
+            <div class="hero-progress-info">
+              <span>Progresso da trilha</span>
+              <span>30%</span>
+            </div>
+            <div class="hero-progress-bar">
+              <div class="hero-progress-fill" style="width: 30%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-mascot" aria-hidden="true">
+          <div class="mascot-face">
+            <div class="eye eye-left"></div>
+            <div class="eye eye-right"></div>
+            <div class="smile"></div>
+          </div>
+          <p class="mascot-bubble">
+            “Um passo de cada vez 😉”
+          </p>
+        </div>
+      </section>
+
+      <!-- MAPA DE UNIDADES -->
+      <section class="units-section" aria-label="Mapa de unidades">
+        <div class="units-header">
+          <h2>Sua trilha</h2>
+          <span class="units-subtitle">Comece de cima e siga o caminho.</span>
+        </div>
+
+        <div class="unit-path">
+          <div class="unit-list">
+            <!-- Unidade 1 -->
+            <button
+              class="unit-node unit-node--active unit-button"
+              data-unit-id="meu-nome"
+            >
+              <div class="unit-badge">1</div>
+              <div class="unit-content">
+                <h3>Meu nome</h3>
+                <p>Aprenda a escrever e reconhecer seu nome.</p>
+                <div class="unit-tags">
+                  <span class="tag tag--green">Iniciando</span>
+                  <span class="tag tag--soft">3 lições</span>
+                </div>
+              </div>
+            </button>
+
+            <!-- Linha de conexão -->
+            <div class="unit-line"></div>
+
+            <!-- Unidade 2 -->
+            <button
+              class="unit-node unit-button"
+              data-unit-id="palavras-simples"
+            >
+              <div class="unit-badge">2</div>
+              <div class="unit-content">
+                <h3>Palavras simples</h3>
+                <p>Palavras do dia a dia para ganhar segurança.</p>
+                <div class="unit-tags">
+                  <span class="tag tag--blue">Próxima</span>
+                  <span class="tag tag--soft">5 lições</span>
+                </div>
+              </div>
+            </button>
+
+            <div class="unit-line"></div>
+
+            <!-- Unidade 3 -->
+            <button
+              class="unit-node unit-button"
+              data-unit-id="mundo-digital"
+            >
+              <div class="unit-badge">3</div>
+              <div class="unit-content">
+                <h3>Mundo digital</h3>
+                <p>Use o celular e a internet sem medo.</p>
+                <div class="unit-tags">
+                  <span class="tag tag--orange">Digital</span>
+                  <span class="tag tag--soft">8 lições</span>
+                </div>
+              </div>
+            </button>
+
+            <div class="unit-line"></div>
+
+            <!-- Unidade 4 (bloqueada) -->
+            <button
+              class="unit-node unit-node--locked"
+              data-unit-id="meu-curriculo"
+            >
+              <div class="unit-badge unit-badge--lock">🔒</div>
+              <div class="unit-content">
+                <h3>Meu currículo</h3>
+                <p>Monte seu currículo com o que você aprendeu.</p>
+                <div class="unit-tags">
+                  <span class="tag tag--soft">Libera depois do Mundo digital</span>
+                </div>
+              </div>
+            </button>
+
+            <div class="unit-line"></div>
+
+            <!-- Unidade 5 -->
+            <button
+              class="unit-node unit-button"
+              data-unit-id="cursos-parceiros"
+            >
+              <div class="unit-badge">5</div>
+              <div class="unit-content">
+                <h3>Cursos em Vídeo</h3>
+                <p>Trilhas ligadas ao Curso em Vídeo (Guanabara).</p>
+                <div class="unit-tags">
+                  <span class="tag tag--red">Parceiros</span>
+                </div>
+              </div>
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- TELA DE LIÇÃO -->
+    <main id="screen-lesson" class="screen" aria-labelledby="lesson-title">
+      <header class="lesson-top">
+        <button class="back-button" data-action="go-home">
+          ← Início
+        </button>
+
+        <div class="lesson-top-info">
+          <p class="lesson-course">Alfabetização básica</p>
+          <h1 id="lesson-title">Meu nome</h1>
+          <p id="lesson-subtitle" class="lesson-subtitle">Lição 1 de 3</p>
+        </div>
+
+        <div class="lesson-xp">
+          +10 XP
+        </div>
+      </header>
+
+      <section class="lesson-progress-wrap">
+        <div class="lesson-progress-bar" aria-label="Progresso da lição">
+          <div class="lesson-progress-fill" id="lesson-progress"></div>
+        </div>
+      </section>
+
+      <section class="lesson-main" aria-live="polite">
+        <div id="lesson-step-content">
+          <!-- Conteúdo vem do JS -->
+        </div>
+      </section>
+
+      <footer class="lesson-footer">
+        <button class="lesson-btn lesson-btn--ghost" id="btn-skip">
+          Pular
+        </button>
+        <button class="lesson-btn" id="btn-next">
+          Avançar
+        </button>
+      </footer>
+    </main>
+
+    <!-- NAVEGAÇÃO INFERIOR -->
+    <nav class="bottom-nav" aria-label="Navegação principal">
+      <button class="nav-item nav-item--active" data-nav="home">
+        <span aria-hidden="true">🏠</span>
+        <span>Início</span>
+      </button>
+      <button class="nav-item" data-nav="progress">
+        <span aria-hidden="true">📊</span>
+        <span>Progresso</span>
+      </button>
+      <button class="nav-item" data-nav="settings">
+        <span aria-hidden="true">⚙️</span>
+        <span>Configurações</span>
+      </button>
+    </nav>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

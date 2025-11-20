@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Avance - Progresso</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="progress">
+  <div class="app">
+    <header class="top-bar">
+      <div class="logo">
+        <div class="logo-icon" aria-hidden="true">
+          <span>A</span>
+        </div>
+        <div class="logo-text">
+          <span class="logo-name">Avance</span>
+          <span class="logo-tagline">Da alfabetização ao emprego</span>
+        </div>
+      </div>
+
+      <div class="top-stats" aria-label="Seu progresso hoje">
+        <div class="stat-pill">
+          <span class="stat-label">Vidas</span>
+          <span class="stat-value">3</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-label">Sequência</span>
+          <span class="stat-value">5 dias</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-label">Moedas</span>
+          <span class="stat-value">120</span>
+        </div>
+      </div>
+    </header>
+
+    <main aria-labelledby="progress-title">
+      <section class="progress-header">
+        <h1 id="progress-title" data-speak>Seu progresso</h1>
+        <p class="progress-subtitle" data-speak>
+          Acompanhe o quanto você já avançou nas trilhas.
+        </p>
+      </section>
+
+      <section class="progress-summary">
+        <div class="progress-card">
+          <h2 data-speak>Tempo de estudo</h2>
+          <p class="progress-number" data-speak>12 horas</p>
+          <p class="progress-detail" data-speak>
+            Somando todas as trilhas concluídas.
+          </p>
+        </div>
+
+        <div class="progress-card">
+          <h2 data-speak>Trilhas concluídas</h2>
+          <p class="progress-number" data-speak>2 trilhas</p>
+          <p class="progress-detail" data-speak>
+            Novo conteúdo será liberado em breve.
+          </p>
+        </div>
+      </section>
+
+      <section class="progress-week">
+        <h2 data-speak>Sua semana</h2>
+        <p class="progress-subtitle" data-speak>
+          Cada barra mostra quantos minutos você estudou em cada dia.
+        </p>
+
+        <div class="week-chart" aria-label="Gráfico simples de minutos estudados na semana">
+          <div class="week-bar">
+            <div class="week-bar-fill" style="height: 30%;"></div>
+            <span class="week-label">Seg</span>
+          </div>
+          <div class="week-bar">
+            <div class="week-bar-fill" style="height: 60%;"></div>
+            <span class="week-label">Ter</span>
+          </div>
+          <div class="week-bar">
+            <div class="week-bar-fill" style="height: 80%;"></div>
+            <span class="week-label">Qua</span>
+          </div>
+          <div class="week-bar">
+            <div class="week-bar-fill" style="height: 20%;"></div>
+            <span class="week-label">Qui</span>
+          </div>
+          <div class="week-bar">
+            <div class="week-bar-fill" style="height: 50%;"></div>
+            <span class="week-label">Sex</span>
+          </div>
+          <div class="week-bar">
+            <div class="week-bar-fill" style="height: 10%;"></div>
+            <span class="week-label">Sáb</span>
+          </div>
+          <div class="week-bar">
+            <div class="week-bar-fill" style="height: 0%;"></div>
+            <span class="week-label">Dom</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Navegação principal">
+      <a class="nav-item" href="home.html">Início</a>
+      <a class="nav-item nav-item--active" href="progress.html">Progresso</a>
+      <a class="nav-item" href="opportunities.html">Oportunidades</a>
+      <a class="nav-item" href="settings.html">Configurações</a>
+    </nav>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

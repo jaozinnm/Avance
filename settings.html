@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Avance - Configurações</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="settings">
+  <div class="app">
+    <header class="top-bar">
+      <div class="logo">
+        <div class="logo-icon" aria-hidden="true">
+          <span>A</span>
+        </div>
+        <div class="logo-text">
+          <span class="logo-name">Avance</span>
+          <span class="logo-tagline">Da alfabetização ao emprego</span>
+        </div>
+      </div>
+
+      <div class="top-stats" aria-label="Seu progresso hoje">
+        <div class="stat-pill">
+          <span class="stat-label">Vidas</span>
+          <span class="stat-value">3</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-label">Sequência</span>
+          <span class="stat-value">5 dias</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-label">Moedas</span>
+          <span class="stat-value">120</span>
+        </div>
+      </div>
+    </header>
+
+    <main aria-labelledby="settings-title">
+      <section class="settings-header">
+        <h1 id="settings-title" data-speak>Configurações</h1>
+        <p class="settings-subtitle" data-speak>
+          Deixe o Avance do jeito que fica mais confortável para você.
+        </p>
+      </section>
+
+      <section class="settings-list">
+        <article class="settings-item">
+          <div class="settings-text">
+            <h2 data-speak>Leitura em voz alta</h2>
+            <p data-speak>
+              Pressione e segure em frases para que o aplicativo leia em voz alta.
+            </p>
+          </div>
+          <button
+            class="toggle"
+            id="toggle-voice-assist"
+            role="switch"
+            aria-checked="true"
+          >
+            <span class="toggle-circle"></span>
+          </button>
+        </article>
+
+        <article class="settings-item">
+          <div class="settings-text">
+            <h2 data-speak>Entrada por voz</h2>
+            <p data-speak>
+              Use o botão "Falar" para responder sem precisar digitar.
+            </p>
+          </div>
+          <button
+            class="toggle"
+            id="toggle-voice-input"
+            role="switch"
+            aria-checked="true"
+          >
+            <span class="toggle-circle"></span>
+          </button>
+        </article>
+
+        <article class="settings-item">
+          <div class="settings-text">
+            <h2 data-speak>Tamanho do texto</h2>
+            <p data-speak>
+              Escolha o tamanho das letras para facilitar a leitura.
+            </p>
+            <div class="text-size-options">
+              <button class="text-size-btn" data-size="small">
+                Pequeno
+              </button>
+              <button class="text-size-btn text-size-btn--active" data-size="medium">
+                Médio
+              </button>
+              <button class="text-size-btn" data-size="large">
+                Grande
+              </button>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Navegação principal">
+      <a class="nav-item" href="home.html">Início</a>
+      <a class="nav-item" href="progress.html">Progresso</a>
+      <a class="nav-item" href="opportunities.html">Oportunidades</a>
+      <a class="nav-item nav-item--active" href="settings.html">Configurações</a>
+    </nav>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

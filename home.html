@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Avance - Início</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="home">
+  <div class="app">
+    <header class="top-bar">
+      <div class="logo">
+        <div class="logo-icon" aria-hidden="true">
+          <span>A</span>
+        </div>
+        <div class="logo-text">
+          <span class="logo-name">Avance</span>
+          <span class="logo-tagline">Da alfabetização ao emprego</span>
+        </div>
+      </div>
+
+      <div class="top-stats" aria-label="Seu progresso hoje">
+        <div class="stat-pill">
+          <span class="stat-label">Vidas</span>
+          <span class="stat-value">3</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-label">Sequência</span>
+          <span class="stat-value">5 dias</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-label">Moedas</span>
+          <span class="stat-value">120</span>
+        </div>
+
+        <button class="profile-avatar" aria-label="Perfil do aluno">
+          J
+        </button>
+      </div>
+    </header>
+
+    <main aria-labelledby="home-title">
+      <section class="hero">
+        <div class="hero-left">
+          <p class="hero-badge" data-speak>Trilha ativa</p>
+          <h1 id="home-title" data-speak>Alfabetização básica</h1>
+          <p class="hero-text" data-speak>
+            Vamos avançar mais um pouco hoje. Complete a próxima etapa da sua trilha.
+          </p>
+
+          <a class="hero-button" href="lesson.html">
+            Continuar a trilha "Meu nome"
+          </a>
+
+          <a class="hero-secondary-button" href="onboarding.html" data-speak>
+            Ajustar meu nível inicial
+          </a>
+
+          <div class="hero-progress" data-speak>
+            <div class="hero-progress-info">
+              <span>Progresso da trilha</span>
+              <span>30 por cento</span>
+            </div>
+            <div class="hero-progress-bar" aria-hidden="true">
+              <div class="hero-progress-fill" style="width: 30%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-mascot" aria-hidden="true">
+          <div class="mascot-face">
+            <div class="eye eye-left"></div>
+            <div class="eye eye-right"></div>
+            <div class="smile"></div>
+          </div>
+          <p class="mascot-bubble" data-speak>Um passo de cada vez.</p>
+        </div>
+      </section>
+
+      <section class="units-section" aria-label="Mapa de unidades">
+        <div class="units-header">
+          <h2 data-speak>Sua trilha</h2>
+          <span class="units-subtitle" data-speak>
+            Comece pela primeira etapa e siga o caminho.
+          </span>
+        </div>
+
+        <div class="unit-path">
+          <div class="unit-list">
+            <a class="unit-node unit-node--active" href="lesson.html">
+              <div class="unit-badge">1</div>
+              <div class="unit-content">
+                <h3 data-speak>Meu nome</h3>
+                <p data-speak>Aprenda a escrever e reconhecer o seu nome.</p>
+                <div class="unit-tags">
+                  <span class="tag tag--green" data-speak>Iniciando</span>
+                  <span class="tag tag--soft" data-speak>Três lições</span>
+                </div>
+              </div>
+            </a>
+
+            <div class="unit-line" aria-hidden="true"></div>
+
+            <a class="unit-node" href="lesson.html">
+              <div class="unit-badge">2</div>
+              <div class="unit-content">
+                <h3 data-speak>Palavras simples</h3>
+                <p data-speak>Palavras do dia a dia para ganhar segurança.</p>
+                <div class="unit-tags">
+                  <span class="tag tag--blue" data-speak>Próxima etapa</span>
+                  <span class="tag tag--soft" data-speak>Cinco lições</span>
+                </div>
+              </div>
+            </a>
+
+            <div class="unit-line" aria-hidden="true"></div>
+
+            <a class="unit-node" href="lesson.html">
+              <div class="unit-badge">3</div>
+              <div class="unit-content">
+                <h3 data-speak>Mundo digital</h3>
+                <p data-speak>Use o celular e a internet com segurança.</p>
+                <div class="unit-tags">
+                  <span class="tag tag--orange" data-speak>Digital</span>
+                  <span class="tag tag--soft" data-speak>Oito lições</span>
+                </div>
+              </div>
+            </a>
+
+            <div class="unit-line" aria-hidden="true"></div>
+
+            <div class="unit-node unit-node--locked">
+              <div class="unit-badge unit-badge--lock">X</div>
+              <div class="unit-content">
+                <h3 data-speak>Meu currículo</h3>
+                <p data-speak>Monte seu currículo com o que você aprendeu.</p>
+                <div class="unit-tags">
+                  <span class="tag tag--soft" data-speak>
+                    Libera depois da etapa Mundo digital
+                  </span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Navegação principal">
+      <a class="nav-item nav-item--active" href="home.html">Início</a>
+      <a class="nav-item" href="progress.html">Progresso</a>
+      <a class="nav-item" href="opportunities.html">Oportunidades</a>
+      <a class="nav-item" href="settings.html">Configurações</a>
+    </nav>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Avance - Lição</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="lesson">
+  <div class="app">
+    <header class="top-bar">
+      <div class="logo">
+        <div class="logo-icon" aria-hidden="true">
+          <span>A</span>
+        </div>
+        <div class="logo-text">
+          <span class="logo-name">Avance</span>
+          <span class="logo-tagline">Da alfabetização ao emprego</span>
+        </div>
+      </div>
+    </header>
+
+    <main aria-labelledby="lesson-title">
+      <header class="lesson-top">
+        <button class="back-button" id="btn-back-home">
+          Voltar ao início
+        </button>
+
+        <div class="lesson-top-info">
+          <p class="lesson-course" data-speak>Alfabetização básica</p>
+          <h1 id="lesson-title" data-speak>Meu nome</h1>
+          <p id="lesson-subtitle" class="lesson-subtitle" data-speak>
+            Lição 1 de 3
+          </p>
+        </div>
+
+        <div class="lesson-xp">
+          +10 XP
+        </div>
+      </header>
+
+      <section class="lesson-progress-wrap">
+        <div class="lesson-progress-bar" aria-label="Progresso da lição">
+          <div class="lesson-progress-fill" id="lesson-progress"></div>
+        </div>
+      </section>
+
+      <section class="lesson-main" aria-live="polite">
+        <div id="lesson-step-content">
+          <!-- JS monta as etapas aqui -->
+        </div>
+      </section>
+
+      <footer class="lesson-footer">
+        <button class="lesson-btn lesson-btn--ghost" id="btn-skip">
+          Pular
+        </button>
+        <button class="lesson-btn" id="btn-next">
+          Avançar
+        </button>
+      </footer>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Navegação principal">
+      <a class="nav-item nav-item--active" href="home.html">Início</a>
+      <a class="nav-item" href="progress.html">Progresso</a>
+      <a class="nav-item" href="opportunities.html">Oportunidades</a>
+      <a class="nav-item" href="settings.html">Configurações</a>
+    </nav>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

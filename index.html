@@ -4,6 +4,17 @@
   <meta charset="UTF-8" />
   <title>Avance - Boas-vindas</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>
+    (function () {
+      try {
+        var savedTheme = localStorage.getItem('avance-theme');
+        if (savedTheme === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="icon" type="image/svg+xml" href="./icons/icon.svg" />
   <link rel="stylesheet" href="styles.css" />
   <style>
     .welcome-wrapper {
@@ -14,7 +25,7 @@
       align-items: center;
       text-align: center;
       gap: 18px;
-      padding: 24px 12px 60px;
+      padding: 24px 12px 80px;
     }
 
     .welcome-logo {
@@ -28,7 +39,7 @@
       width: 96px;
       height: 96px;
       border-radius: 32px;
-      background: radial-gradient(circle at top, #00d46f 0, var(--green) 55%, #008c3d 100%);
+      background: radial-gradient(circle at top, rgba(30, 119, 32, 0.1) 0, var(--green) 55%, #145118 100%);
       position: relative;
       box-shadow: var(--shadow-soft);
       margin-bottom: 4px;
@@ -53,6 +64,7 @@
     .welcome-title {
       font-size: 1.6rem;
       font-weight: 800;
+      color: var(--blue);
     }
 
     .welcome-tagline {
@@ -69,19 +81,30 @@
     .welcome-button {
       border: none;
       border-radius: 999px;
-      padding: 12px 20px;
-      background: linear-gradient(135deg, var(--green), #2dd06c);
+      padding: 12px 24px;
+      background: linear-gradient(135deg, var(--green), #2fa832);
       color: var(--white);
       font-size: 1rem;
       font-weight: 700;
       cursor: pointer;
       box-shadow: var(--shadow-soft);
       text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 220px;
+      touch-action: manipulation;
+      transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
     }
 
     .welcome-button:hover {
       box-shadow: var(--shadow-strong);
       transform: translateY(-1px);
+    }
+
+    .welcome-button:active {
+      transform: translateY(0);
+      box-shadow: var(--shadow-soft);
     }
 
     .welcome-note {
@@ -113,7 +136,7 @@
         </p>
       </div>
 
-      <a href="home.html" class="welcome-button" data-speak>
+      <a href="home.html" class="welcome-button" role="button">
         Começar agora
       </a>
 

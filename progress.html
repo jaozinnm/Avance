@@ -4,14 +4,25 @@
   <meta charset="UTF-8" />
   <title>Avance - Progresso</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>
+    (function () {
+      try {
+        var savedTheme = localStorage.getItem('avance-theme');
+        if (savedTheme === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="icon" type="image/svg+xml" href="./icons/icon.svg" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body data-page="progress">
   <div class="app">
     <header class="top-bar">
       <div class="logo">
-        <div class="logo-icon" aria-hidden="true">
-          <span>A</span>
+        <div class="logo-icon">
+          <img src="./icons/icon.svg" alt="Logo do Avance" />
         </div>
         <div class="logo-text">
           <span class="logo-name">Avance</span>

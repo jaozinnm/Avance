@@ -1,410 +1,449 @@
-// -------------------------
-// CONFIGURAÇÕES GLOBAIS
-// -------------------------
-let voiceAssistEnabled = true;
-let voiceInputEnabled = true;
+document.addEventListener("DOMContentLoaded", () => {
+  const root = document.documentElement;
+  const body = document.body;
+  const page = body.dataset.page || "";
 
-// Carrega preferências do localStorage
-function loadSettings() {
-  const voiceAssist = localStorage.getItem("avance_voiceAssist");
-  const voiceInput = localStorage.getItem("avance_voiceInput");
+  /* -----------------------
+   * 1. Tema claro/escuro
+   * --------------------- */
+  const THEME_KEY = "avance-theme";
 
-  if (voiceAssist !== null) {
-    voiceAssistEnabled = voiceAssist === "true";
-  }
-  if (voiceInput !== null) {
-    voiceInputEnabled = voiceInput === "true";
-  }
-}
+  function applyTheme(theme) {
+    const normalized = theme === "dark" ? "dark" : "light";
+    root.setAttribute("data-theme", normalized);
 
-function saveSettings() {
-  localStorage.setItem("avance_voiceAssist", String(voiceAssistEnabled));
-  localStorage.setItem("avance_voiceInput", String(voiceInputEnabled));
-}
-
-// -------------------------
-// TEXTO EM VOZ ALTA
-// -------------------------
-let currentUtterance = null;
-
-function speakText(text) {
-  if (!voiceAssistEnabled) return;
-  if (!("speechSynthesis" in window)) return;
-
-  stopSpeaking();
-
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "pt-BR";
-  utterance.rate = 1;
-  currentUtterance = utterance;
-  window.speechSynthesis.speak(utterance);
-}
-
-function stopSpeaking() {
-  if (!("speechSynthesis" in window)) return;
-  window.speechSynthesis.cancel();
-  currentUtterance = null;
-}
-
-// Habilita "pressionar e segurar" para ler
-function enablePressToSpeak() {
-  const speakableElements = document.querySelectorAll("[data-speak]");
-
-  speakableElements.forEach((el) => {
-    if (el.dataset.speakBound === "true") return;
-    el.dataset.speakBound = "true";
-
-    const text = el.textContent.trim();
-
-    const start = (event) => {
-      event.preventDefault();
-      speakText(text);
-    };
-
-    const end = () => {
-      stopSpeaking();
-    };
-
-    el.addEventListener("mousedown", start);
-    el.addEventListener("touchstart", start, { passive: false });
-
-    el.addEventListener("mouseup", end);
-    el.addEventListener("mouseleave", end);
-    el.addEventListener("touchend", end);
-    el.addEventListener("touchcancel", end);
-  });
-}
-
-// -------------------------
-// RECONHECIMENTO DE VOZ
-// -------------------------
-const SpeechRecognition =
-  window.SpeechRecognition || window.webkitSpeechRecognition;
-let recognition = null;
-
-if (SpeechRecognition) {
-  recognition = new SpeechRecognition();
-  recognition.lang = "pt-BR";
-  recognition.continuous = false;
-  recognition.interimResults = false;
-}
-
-// Liga botão de voz a um input (usado na tela de lição)
-function attachVoiceToInput(inputElement, statusElement, buttonElement) {
-  if (!recognition || !voiceInputEnabled) {
-    statusElement.textContent =
-      "Se o seu navegador permitir, esta opção ficará disponível.";
-    buttonElement.disabled = !recognition || !voiceInputEnabled;
-    return;
-  }
-
-  buttonElement.disabled = false;
-
-  let isListening = false;
-
-  buttonElement.addEventListener("click", () => {
-    if (!isListening) {
-      try {
-        recognition.start();
-        isListening = true;
-        buttonElement.classList.add("voice-button--active");
-        statusElement.textContent =
-          "Ouvindo. Fale claramente perto do microfone.";
-      } catch (error) {
-        statusElement.textContent =
-          "Não foi possível iniciar o reconhecimento de voz.";
+    document.querySelectorAll("#theme-toggle").forEach((btn) => {
+      const isDark = normalized === "dark";
+      btn.setAttribute("aria-pressed", String(isDark));
+      const icon = btn.querySelector(".theme-toggle-icon");
+      if (icon) {
+        icon.textContent = isDark ? "🌙" : "☀️";
       }
-    } else {
-      recognition.stop();
-      isListening = false;
-      buttonElement.classList.remove("voice-button--active");
-      statusElement.textContent = "";
+    });
+
+    const darkToggle = document.getElementById("toggle-dark-mode");
+    if (darkToggle) {
+      const isDark = normalized === "dark";
+      darkToggle.classList.toggle("toggle--on", isDark);
+      darkToggle.setAttribute("aria-checked", String(isDark));
     }
-  });
+  }
 
-  recognition.onresult = (event) => {
-    const transcript = event.results[0][0].transcript;
-    inputElement.value = transcript;
-    statusElement.textContent = "Texto preenchido com a sua fala.";
-  };
+  function initTheme() {
+    const stored = localStorage.getItem(THEME_KEY);
+    let theme = stored;
 
-  recognition.onerror = () => {
-    statusElement.textContent =
-      "Ocorreu um erro no reconhecimento de voz. Tente novamente.";
-    buttonElement.classList.remove("voice-button--active");
-    isListening = false;
-  };
+    if (!theme) {
+      const prefersDark =
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches;
+      theme = prefersDark ? "dark" : "light";
+    }
 
-  recognition.onend = () => {
-    buttonElement.classList.remove("voice-button--active");
-    isListening = false;
-  };
-}
+    applyTheme(theme);
 
-// -------------------------
-// DADOS DA TRILHA (tela de lição)
-// -------------------------
-const tracks = {
-  "meu-nome": {
-    titulo: "Meu nome",
-    passos: [
+    document.querySelectorAll("#theme-toggle, #toggle-dark-mode").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const current = root.getAttribute("data-theme") || "light";
+        const next = current === "light" ? "dark" : "light";
+        localStorage.setItem(THEME_KEY, next);
+        applyTheme(next);
+      });
+    });
+  }
+
+  initTheme();
+
+  /* -----------------------
+   * 2. Tamanho do texto
+   * --------------------- */
+  const TEXT_SIZE_KEY = "avance-text-size";
+
+  function applyTextSize(size) {
+    const validSizes = ["small", "medium", "large"];
+    const finalSize = validSizes.includes(size) ? size : "medium";
+
+    root.setAttribute("data-text-size", finalSize);
+    root.classList.remove("text-size-small", "text-size-medium", "text-size-large");
+    root.classList.add("text-size-" + finalSize);
+
+    document.querySelectorAll(".text-size-btn").forEach((btn) => {
+      const btnSize = btn.dataset.size;
+      btn.classList.toggle("text-size-btn--active", btnSize === finalSize);
+    });
+  }
+
+  function initTextSize() {
+    const stored = localStorage.getItem(TEXT_SIZE_KEY) || "medium";
+    applyTextSize(stored);
+
+    document.querySelectorAll(".text-size-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const size = btn.dataset.size || "medium";
+        localStorage.setItem(TEXT_SIZE_KEY, size);
+        applyTextSize(size);
+      });
+    });
+  }
+
+  initTextSize();
+
+  /* -----------------------
+   * 3. Toggles de acessibilidade
+   * --------------------- */
+
+  const VOICE_ASSIST_KEY = "avance-voice-assist";
+  const VOICE_INPUT_KEY = "avance-voice-input";
+
+  function applyToggleState(button, isOn) {
+    if (!button) return;
+    button.classList.toggle("toggle--on", isOn);
+    button.setAttribute("aria-checked", String(isOn));
+  }
+
+  function initToggle(id, storageKey, defaultOn = true) {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+
+    const stored = localStorage.getItem(storageKey);
+    const initial =
+      stored === null ? defaultOn : stored === "true" || stored === "1";
+
+    applyToggleState(btn, initial);
+
+    btn.addEventListener("click", () => {
+      const current = btn.getAttribute("aria-checked") === "true";
+      const next = !current;
+      applyToggleState(btn, next);
+      localStorage.setItem(storageKey, String(next));
+    });
+  }
+
+  function isVoiceAssistEnabled() {
+    const stored = localStorage.getItem(VOICE_ASSIST_KEY);
+    return stored === null || stored === "true" || stored === "1";
+  }
+
+  function isVoiceInputEnabled() {
+    const stored = localStorage.getItem(VOICE_INPUT_KEY);
+    return stored === null || stored === "true" || stored === "1";
+  }
+
+  initToggle("toggle-voice-assist", VOICE_ASSIST_KEY, true);
+  initToggle("toggle-voice-input", VOICE_INPUT_KEY, true);
+
+  /* -----------------------
+   * 4. Leitura em voz alta (pressionar e segurar)
+   * --------------------- */
+
+  function initVoiceReading() {
+    if (!("speechSynthesis" in window)) {
+      return;
+    }
+
+    let pressTimer = null;
+
+    function speak(text) {
+      if (!text) return;
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = "pt-BR";
+      utter.rate = 1;
+      speechSynthesis.speak(utter);
+    }
+
+    function startPress(event) {
+      if (!isVoiceAssistEnabled()) return;
+      const target = event.currentTarget;
+      const text = target.innerText || target.textContent || "";
+
+      pressTimer = window.setTimeout(() => {
+        speak(text.trim());
+      }, 500);
+    }
+
+    function cancelPress() {
+      if (pressTimer) {
+        clearTimeout(pressTimer);
+        pressTimer = null;
+      }
+    }
+
+    document.querySelectorAll("[data-speak]").forEach((el) => {
+      el.addEventListener("mousedown", startPress);
+      el.addEventListener("touchstart", startPress);
+      el.addEventListener("mouseup", cancelPress);
+      el.addEventListener("mouseleave", cancelPress);
+      el.addEventListener("touchend", cancelPress);
+      el.addEventListener("touchcancel", cancelPress);
+    });
+  }
+
+  initVoiceReading();
+
+  /* -----------------------
+   * 5. Navegação inferior (marca página atual)
+   * --------------------- */
+
+  function initBottomNav() {
+    const currentPage = body.dataset.page;
+    if (!currentPage) return;
+
+    const navItems = document.querySelectorAll(".bottom-nav .nav-item");
+    if (!navItems.length) return;
+
+    navItems.forEach((item) => item.classList.remove("nav-item--active"));
+
+    navItems.forEach((item) => {
+      const href = item.getAttribute("href") || "";
+      if (href.includes(currentPage)) {
+        item.classList.add("nav-item--active");
+      }
+    });
+  }
+
+  initBottomNav();
+
+  /* -----------------------
+   * 6. Página de lição – fluxo dinâmico
+   * --------------------- */
+
+  if (page === "lesson") {
+    const LESSON_STEPS = [
       {
-        tipo: "texto",
-        pergunta: "Vamos começar pelo seu nome.",
-        instrucoes:
-          "Digite o seu primeiro nome como você gostaria de vê-lo escrito.",
-        placeholder: "Exemplo: João",
+        id: "seu-nome",
+        type: "input",
+        question: "Qual é o seu nome?",
+        instruction: "Escreva seu nome como você costuma assinar.",
+        placeholder: "Digite seu nome",
       },
       {
-        tipo: "opcoes",
-        pergunta: "Qual destas opções está escrita corretamente?",
-        instrucoes: "Selecione a opção correta.",
-        opcoes: ["joao", "JOAO", "João"],
-        corretaIndex: 2,
+        id: "reconhecer-nome",
+        type: "choice",
+        question: "Qual destas opções está igual ao seu nome?",
+        instruction: "Escolha a opção escrita corretamente.",
+        options: [
+          "joao silva",
+          "João silva",
+          "João Silva",
+          "JOAO SILVA",
+        ],
       },
       {
-        tipo: "texto",
-        pergunta: "Agora escreva o seu nome completo.",
-        instrucoes: "Não se preocupe. Depois você poderá ajustar.",
-        placeholder: "Seu nome completo",
+        id: "treino-final",
+        type: "input",
+        question: "Treine escrever seu nome mais uma vez",
+        instruction: "Escreva seu nome em letra de forma, com calma.",
+        placeholder: "Escreva seu nome novamente",
       },
-    ],
-  },
-};
+    ];
 
-// -------------------------
-// TELA DE LIÇÃO
-// -------------------------
-function initLessonPage() {
-  const container = document.getElementById("lesson-step-content");
-  if (!container) return; // não está na página de lição
+    const progressFill = document.getElementById("lesson-progress");
+    const subtitle = document.getElementById("lesson-subtitle");
+    const content = document.getElementById("lesson-step-content");
+    const btnNext = document.getElementById("btn-next");
+    const btnSkip = document.getElementById("btn-skip");
+    const btnBackHome = document.getElementById("btn-back-home");
 
-  const lessonTitle = document.getElementById("lesson-title");
-  const lessonSubtitle = document.getElementById("lesson-subtitle");
-  const lessonProgress = document.getElementById("lesson-progress");
-  const btnNext = document.getElementById("btn-next");
-  const btnSkip = document.getElementById("btn-skip");
-  const backButton = document.getElementById("btn-back-home");
+    let currentStepIndex = 0;
 
-  let trilhaAtual = tracks["meu-nome"];
-  let passoAtualIndex = 0;
+    function updateProgress() {
+      if (!progressFill) return;
+      const total = LESSON_STEPS.length;
+      const percent = ((currentStepIndex + 1) / total) * 100;
+      progressFill.style.width = percent + "%";
 
-  function atualizarPasso() {
-    const total = trilhaAtual.passos.length;
-    const passo = trilhaAtual.passos[passoAtualIndex];
-    const numero = passoAtualIndex + 1;
+      if (subtitle) {
+        subtitle.textContent = `Lição ${currentStepIndex + 1} de ${total}`;
+      }
+    }
 
-    lessonTitle.textContent = trilhaAtual.titulo;
-    lessonSubtitle.textContent = `Lição ${numero} de ${total}`;
-    lessonProgress.style.width = `${Math.round((numero / total) * 100)}%`;
+    function renderStep() {
+      if (!content) return;
 
-    if (passo.tipo === "texto") {
-      container.innerHTML = `
-        <div class="lesson-card">
-          <p class="lesson-question" data-speak>${passo.pergunta}</p>
-          <p class="lesson-instruction" data-speak>${passo.instrucoes}</p>
+      const step = LESSON_STEPS[currentStepIndex];
+      if (!step) {
+        content.innerHTML = `
+          <article class="lesson-card">
+            <h2 class="lesson-question" data-speak>Parabéns!</h2>
+            <p class="lesson-instruction" data-speak>
+              Você completou esta lição. Continue praticando seu nome sempre que puder.
+            </p>
+          </article>
+        `;
+        if (btnNext) {
+          btnNext.textContent = "Concluir";
+        }
+        initVoiceReading();
+        return;
+      }
 
+      let inner = `
+        <article class="lesson-card">
+          <h2 class="lesson-question" data-speak>${step.question}</h2>
+          <p class="lesson-instruction" data-speak>${step.instruction}</p>
+      `;
+
+      if (step.type === "input") {
+        inner += `
           <div class="answer-input-wrap">
-            <label class="sr-only" for="answer-text">Resposta</label>
             <input
-              id="answer-text"
+              id="answer-input"
               class="answer-input"
               type="text"
-              placeholder="${passo.placeholder || ""}"
+              autocomplete="off"
+              placeholder="${step.placeholder || ""}"
             />
             <button
               type="button"
               class="voice-button"
-              id="voice-button"
+              id="voice-input-btn"
             >
               Falar
             </button>
           </div>
-
-          <p class="voice-status" id="voice-status"></p>
-        </div>
-      `;
-
-      const input = document.getElementById("answer-text");
-      const voiceButton = document.getElementById("voice-button");
-      const voiceStatus = document.getElementById("voice-status");
-      attachVoiceToInput(input, voiceStatus, voiceButton);
-    } else if (passo.tipo === "opcoes") {
-      const opcoesHTML = passo.opcoes
-        .map(
-          (opcao, index) => `
+          <p class="voice-status" id="voice-status">
+            Toque em "Falar" para responder por voz.
+          </p>
+        `;
+      } else if (step.type === "choice") {
+        inner += `<div class="options-grid">`;
+        (step.options || []).forEach((opt, index) => {
+          inner += `
             <button
+              type="button"
               class="option-button"
               data-option-index="${index}"
-              data-speak
             >
-              ${opcao}
+              ${opt}
             </button>
-          `
-        )
-        .join("");
+          `;
+        });
+        inner += `</div>`;
+      }
 
-      container.innerHTML = `
-        <div class="lesson-card">
-          <p class="lesson-question" data-speak>${passo.pergunta}</p>
-          <p class="lesson-instruction" data-speak>${passo.instrucoes}</p>
-          <div class="options-grid">
-            ${opcoesHTML}
-          </div>
-        </div>
-      `;
+      inner += `</article>`;
+      content.innerHTML = inner;
 
-      container.querySelectorAll(".option-button").forEach((button) => {
-        button.addEventListener("click", () => {
-          container
-            .querySelectorAll(".option-button")
-            .forEach((b) => b.classList.remove("option-button--selected"));
+      updateProgress();
+      initVoiceReading();
+      initLessonVoiceInput(step);
+      initChoiceStep(step);
+    }
 
-          button.classList.add("option-button--selected");
+    function initLessonVoiceInput(step) {
+      if (!isVoiceInputEnabled()) return;
+      if (!step || step.type !== "input") return;
+
+      const input = document.getElementById("answer-input");
+      const btn = document.getElementById("voice-input-btn");
+      const statusEl = document.getElementById("voice-status");
+
+      if (!input || !btn) return;
+
+      const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
+
+      if (!SpeechRecognition) {
+        if (statusEl) {
+          statusEl.textContent =
+            "Seu navegador não suporta entrada por voz. Tudo bem, você pode digitar.";
+        }
+        return;
+      }
+
+      const recognition = new SpeechRecognition();
+      recognition.lang = "pt-BR";
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      let listening = false;
+
+      recognition.addEventListener("start", () => {
+        listening = true;
+        btn.classList.add("voice-button--active");
+        if (statusEl) {
+          statusEl.textContent = "Ouvindo... fale seu nome.";
+        }
+      });
+
+      recognition.addEventListener("end", () => {
+        listening = false;
+        btn.classList.remove("voice-button--active");
+        if (statusEl && !input.value) {
+          statusEl.textContent =
+            'Não entendi. Toque em "Falar" e tente novamente.';
+        }
+      });
+
+      recognition.addEventListener("result", (event) => {
+        const transcript = event.results[0][0].transcript;
+        input.value = transcript;
+        if (statusEl) {
+          statusEl.textContent = "Tudo certo! Você pode ajustar o texto se quiser.";
+        }
+      });
+
+      btn.addEventListener("click", () => {
+        if (!isVoiceInputEnabled()) {
+          if (statusEl) {
+            statusEl.textContent =
+              "Entrada por voz está desativada nas configurações.";
+          }
+          return;
+        }
+
+        if (listening) {
+          recognition.stop();
+        } else {
+          try {
+            recognition.start();
+          } catch (e) {
+          }
+        }
+      });
+    }
+
+    function initChoiceStep(step) {
+      if (!step || step.type !== "choice") return;
+
+      const buttons = content.querySelectorAll(".option-button");
+      if (!buttons.length) return;
+
+      buttons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          buttons.forEach((b) =>
+            b.classList.remove("option-button--selected")
+          );
+          btn.classList.add("option-button--selected");
         });
       });
     }
 
-    enablePressToSpeak();
-  }
-
-  btnNext.addEventListener("click", () => {
-    if (passoAtualIndex < trilhaAtual.passos.length - 1) {
-      passoAtualIndex++;
-      atualizarPasso();
-    } else {
-      alert("Parabéns. Você concluiu esta demonstração da trilha.");
-      window.location.href = "home.html";
+    if (btnNext) {
+      btnNext.addEventListener("click", () => {
+        if (currentStepIndex >= LESSON_STEPS.length) {
+          window.location.href = "home.html";
+          return;
+        }
+        currentStepIndex += 1;
+        renderStep();
+      });
     }
-  });
 
-  btnSkip.addEventListener("click", () => {
-    if (passoAtualIndex < trilhaAtual.passos.length - 1) {
-      passoAtualIndex++;
-      atualizarPasso();
-    } else {
-      window.location.href = "home.html";
+    if (btnSkip) {
+      btnSkip.addEventListener("click", () => {
+        currentStepIndex += 1;
+        renderStep();
+      });
     }
-  });
 
-  if (backButton) {
-    backButton.addEventListener("click", () => {
-      window.location.href = "home.html";
-    });
-  }
-
-  atualizarPasso();
-}
-
-// -------------------------
-// TELA DE CONFIGURAÇÕES
-// -------------------------
-function initSettingsPage() {
-  const toggleVoiceAssist = document.getElementById("toggle-voice-assist");
-  const toggleVoiceInput = document.getElementById("toggle-voice-input");
-  const textSizeButtons = document.querySelectorAll(".text-size-btn");
-
-  if (!toggleVoiceAssist || !toggleVoiceInput) return;
-
-  const updateToggleVisual = (button, isOn) => {
-    if (isOn) {
-      button.classList.add("toggle--on");
-      button.setAttribute("aria-checked", "true");
-    } else {
-      button.classList.remove("toggle--on");
-      button.setAttribute("aria-checked", "false");
+    if (btnBackHome) {
+      btnBackHome.addEventListener("click", () => {
+        window.location.href = "home.html";
+      });
     }
-  };
 
-  updateToggleVisual(toggleVoiceAssist, voiceAssistEnabled);
-  updateToggleVisual(toggleVoiceInput, voiceInputEnabled);
-
-  toggleVoiceAssist.addEventListener("click", () => {
-    voiceAssistEnabled = !voiceAssistEnabled;
-    updateToggleVisual(toggleVoiceAssist, voiceAssistEnabled);
-    saveSettings();
-    if (!voiceAssistEnabled) stopSpeaking();
-  });
-
-  toggleVoiceInput.addEventListener("click", () => {
-    voiceInputEnabled = !voiceInputEnabled;
-    updateToggleVisual(toggleVoiceInput, voiceInputEnabled);
-    saveSettings();
-  });
-
-  textSizeButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      textSizeButtons.forEach((b) =>
-        b.classList.remove("text-size-btn--active")
-      );
-      btn.classList.add("text-size-btn--active");
-
-      const size = btn.getAttribute("data-size");
-      if (size === "small") {
-        document.documentElement.style.setProperty("--font-size-base", "0.95rem");
-      } else if (size === "large") {
-        document.documentElement.style.setProperty("--font-size-base", "1.1rem");
-      } else {
-        document.documentElement.style.setProperty("--font-size-base", "1rem");
-      }
-    });
-  });
-}
-
-// -------------------------
-// TELA DE ONBOARDING
-// -------------------------
-function initOnboardingPage() {
-  const levelCards = document.querySelectorAll(".level-card");
-  const levelSummary = document.getElementById("level-summary");
-  const btnApplyLevel = document.getElementById("btn-apply-level");
-  if (!levelCards.length) return;
-
-  let selectedLevel = null;
-
-  levelCards.forEach((card) => {
-    card.addEventListener("click", () => {
-      levelCards.forEach((c) => c.classList.remove("level-card--selected"));
-      card.classList.add("level-card--selected");
-      selectedLevel = card.getAttribute("data-level");
-
-      if (selectedLevel === "iniciante") {
-        levelSummary.textContent =
-          "Você escolheu começar do zero. A trilha recomendada começa em 'Meu nome' e 'Palavras simples'.";
-      } else if (selectedLevel === "intermediario") {
-        levelSummary.textContent =
-          "Você já lê algumas palavras. A trilha recomendada começa em 'Palavras simples' e 'Mundo digital'.";
-      } else if (selectedLevel === "avancado") {
-        levelSummary.textContent =
-          "Você já lê textos simples. Vamos focar em 'Mundo digital' e 'Meu currículo'.";
-      }
-    });
-  });
-
-  btnApplyLevel.addEventListener("click", () => {
-    if (!selectedLevel) {
-      alert("Escolha uma opção de nível para que possamos sugerir a trilha.");
-      return;
-    }
-    alert("Trilha sugerida aplicada para este protótipo.");
-    window.location.href = "home.html";
-  });
-}
-
-// -------------------------
-// INICIALIZAÇÃO GERAL
-// -------------------------
-document.addEventListener("DOMContentLoaded", () => {
-  loadSettings();
-  enablePressToSpeak();
-
-  const page = document.body.dataset.page;
-
-  if (page === "lesson") {
-    initLessonPage();
-  } else if (page === "settings") {
-    initSettingsPage();
-  } else if (page === "onboarding") {
-    initOnboardingPage();
+    renderStep();
   }
 });

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
   <title>Avance - Início</title>
@@ -11,12 +12,13 @@
         if (savedTheme === 'dark') {
           document.documentElement.setAttribute('data-theme', 'dark');
         }
-      } catch (e) {}
+      } catch (e) { }
     })();
   </script>
   <link rel="icon" type="image/svg+xml" href="./icons/icon.svg" />
   <link rel="stylesheet" href="styles.css" />
 </head>
+
 <body data-page="home">
   <div class="app">
     <header class="top-bar">
@@ -55,17 +57,15 @@
         <div class="hero-left">
           <p class="hero-badge" data-speak>Trilha ativa</p>
           <h1 id="home-title" data-speak>Alfabetização básica</h1>
-          <p class="hero-text" data-speak>
-            Vamos avançar mais um pouco hoje. Complete a próxima etapa da sua trilha.
-          </p>
+          <div class="hero-actions">
+            <a class="hero-button" href="lesson.html">
+              Continuar a trilha "Meu nome"
+            </a>
 
-          <a class="hero-button" href="lesson.html">
-            Continuar a trilha "Meu nome"
-          </a>
-
-          <a class="hero-secondary-button" href="onboarding.html" data-speak>
-            Ajustar meu nível inicial
-          </a>
+            <a class="hero-secondary-button" href="onboarding.html" data-speak>
+              Ajustar meu nível inicial
+            </a>
+          </div>
 
           <div class="hero-progress" data-speak>
             <div class="hero-progress-info">
@@ -168,4 +168,5 @@
 
   <script src="app.js"></script>
 </body>
+
 </html>

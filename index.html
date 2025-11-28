@@ -14,7 +14,7 @@
       } catch (e) {}
     })();
   </script>
-  <link rel="icon" type="image/svg+xml" href="./icons/icon.svg" />
+  <link rel="icon" type="image/png" href="./icons/logo.png" />
   <link rel="stylesheet" href="styles.css" />
   <style>
     .welcome-wrapper {
@@ -39,7 +39,12 @@
       width: 96px;
       height: 96px;
       border-radius: 32px;
-      background: radial-gradient(circle at top, rgba(30, 119, 32, 0.1) 0, var(--green) 55%, #145118 100%);
+      background: radial-gradient(
+        circle at top,
+        rgba(0, 152, 216, 0.16) 0,
+        var(--blue) 55%,
+        #005b88 100%
+      );
       position: relative;
       box-shadow: var(--shadow-soft);
       margin-bottom: 4px;
@@ -82,7 +87,7 @@
       border: none;
       border-radius: 999px;
       padding: 12px 24px;
-      background: linear-gradient(135deg, var(--green), #2fa832);
+      background: linear-gradient(135deg, var(--red), var(--yellow));
       color: var(--white);
       font-size: 1rem;
       font-weight: 700;
@@ -116,7 +121,7 @@
 </head>
 <body data-page="index">
   <div class="app">
-    <!-- Podemos deixar sem top-bar na splash pra ficar mais limpa -->
+    <!-- Tela inicial sem top-bar para ficar mais limpa -->
 
     <main class="welcome-wrapper" aria-labelledby="welcome-title">
       <div class="welcome-logo">
